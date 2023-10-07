@@ -1,7 +1,7 @@
 import throttle from 'lodash.throttle';
 import Notiflix from 'notiflix';
 
-refs = {
+const refs = {
   FEED_BACK_MESSAGE: 'feed back msg',
   EMAIL_VALUE: 'email',
   form: document.querySelector('.feedback-form'),

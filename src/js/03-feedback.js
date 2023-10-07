@@ -26,14 +26,7 @@ function onInput(evt) {
 function onEmailInput(evt) {
   formData[evt.target.name] = evt.target.value;
   const emailValue = evt.target.value;
-  sessionStorage.setItem(refs.EMAIL_VALUE, emailValue);
-}
-
-function emailOutput(evt) {
-  const savedEmail = sessionStorage.getItem(refs.EMAIL_VALUE);
-  if (savedEmail) {
-    refs.email.value = savedEmail;
-  }
+  localStorage.setItem(refs.EMAIL_VALUE, emailValue);
 }
 
 function onTextAreaInput(evt) {
@@ -42,10 +35,14 @@ function onTextAreaInput(evt) {
   localStorage.setItem(refs.FEED_BACK_MESSAGE, value);
 }
 
-function textareaOutput(evt) {
+function output(evt) {
   const savedMsg = localStorage.getItem(refs.FEED_BACK_MESSAGE);
+  const savedEmail = localStorage.getItem(refs.EMAIL_VALUE);
   if (savedMsg) {
     refs.textarea.value = savedMsg;
+  }
+  if (savedEmail) {
+    refs.email.value = savedEmail;
   }
 }
 function onFormSubmit(evt) {
@@ -54,12 +51,10 @@ function onFormSubmit(evt) {
     return Notiflix.Notify.failure('Заповніть усі поля форми');
   }
   evt.target.reset();
-  console.log('Session Storage obj: ', sessionStorage);
   console.log('Local Storage obj: ', localStorage);
   localStorage.removeItem(refs.FEED_BACK_MESSAGE);
-  sessionStorage.removeItem(refs.EMAIL_VALUE);
+  localStorage.removeItem(refs.EMAIL_VALUE);
   console.log(formData);
 }
 
-textareaOutput();
-emailOutput();
+output();

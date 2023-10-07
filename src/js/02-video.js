@@ -14,16 +14,18 @@ player.on(
   throttle(function (data) {
     const currentTime = data.seconds;
     localStorage.setItem(KEY_CURRENT_TIME, currentTime);
-  }, 5000)
+  }, 1000)
 );
 
-player
-  .getDuration()
-  .then(function (played) {
-    played = (videoGetTime / duration) * 100;
-  })
-  .catch(function (error) {
-    console.log(
-      'Відлов помилки при зміні стилів плеера яка виникає бо duration - не оголошений'
-    );
-  });
+//Ця частина можливо коли небудь мені знадобиться) а може і ні
+
+// player
+//   .getDuration()
+//   .then(function (played) {
+//     played = (videoGetTime / duration) * 100;
+//   })
+//   .catch(function (error) {
+//     console.log(
+//       'Відлов помилки при зміні стилів плеера яка виникає бо duration - не оголошений'
+//     );
+//   });

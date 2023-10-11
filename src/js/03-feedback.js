@@ -1,8 +1,7 @@
 import throttle from 'lodash.throttle';
 import Notiflix from 'notiflix';
 
-const FEED_BACK_MESSAGE = 'feed back';
-const EMAIL_VALUE = 'email';
+const FEED_BACK_MESSAGE = 'feedback-form-state';
 
 const refs = {
   form: document.querySelector('.feedback-form'),
@@ -12,45 +11,29 @@ const refs = {
 
 const { form, textarea, email } = refs;
 
-let formData = {};
+const formDataObject = {
+  email: email.value,
+  feedback: textarea.value,
+};
 
 form.addEventListener('submit', onFormSubmit);
 form.addEventListener('input', throttle(onInput, 500));
 
-function output(evt) {
-  const savedMsg = localStorage.getItem(FEED_BACK_MESSAGE);
-  const savedEmail = localStorage.getItem(EMAIL_VALUE);
-  if (savedEmail) {
-    email.value = savedEmail;
-    formData[EMAIL_VALUE] = savedEmail;
-  }
-  if (savedMsg) {
-    textarea.value = savedMsg;
-    formData[FEED_BACK_MESSAGE] = savedMsg;
-  }
+const savedFormData = JSON.parse(localStorage.getItem(FEED_BACK_MESSAGE));
+if (savedFormData) {
+  email.value = savedFormData.email;
+  textarea.value = savedFormData.feedback;
+  formDataObject.email = savedFormData.email;
+  formDataObject.feedback = savedFormData.feedback;
 }
-
-output();
 
 function onInput(evt) {
-  const target = evt.target;
-  if (target === email) {
-    onEmailInput(evt);
-  } else if (target === textarea) {
-    onTextAreaInput(evt);
+  if (evt.target === email) {
+    formDataObject.email = evt.target.value;
+  } else if (evt.target === textarea) {
+    formDataObject.feedback = evt.target.value;
   }
-}
-
-function onEmailInput(evt) {
-  formData[evt.target.name] = evt.target.value;
-  const emailValue = evt.target.value;
-  localStorage.setItem(EMAIL_VALUE, emailValue);
-}
-
-function onTextAreaInput(evt) {
-  formData[evt.target.name] = evt.target.value;
-  const value = evt.target.value;
-  localStorage.setItem(FEED_BACK_MESSAGE, value);
+  localStorage.setItem(FEED_BACK_MESSAGE, JSON.stringify(formDataObject));
 }
 
 function onFormSubmit(evt) {
@@ -58,9 +41,9 @@ function onFormSubmit(evt) {
   if (email.value === '' || textarea.value === '') {
     return Notiflix.Notify.failure('Заповніть усі поля форми');
   }
-  console.log(formData);
+  console.log(formDataObject);
   localStorage.removeItem(FEED_BACK_MESSAGE);
-  localStorage.removeItem(EMAIL_VALUE);
   evt.target.reset();
-  formData = {};
+  formDataObject.email = '';
+  formDataObject.feedback = '';
 }
